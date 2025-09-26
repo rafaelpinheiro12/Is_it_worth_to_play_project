@@ -9,15 +9,22 @@ function App() {
   const [inputValue, setInputValue] = useState('');
   const [rawgData, setRawgData] = useState(null);
   const [igdbData, setIgdbData] = useState(null);
-  console.log(rawgData);
-  console.log(igdbData);
 
-  const fetchGame = async () => {
+  const fetchRAWGGame = async () => {
     try {
-      const response = await axios.post('http://localhost:4444/fetchGame', {gameName: inputValue});
-      setRawgData(response.data.rawg);
-      setIgdbData(response.data.igdb);
-      console.log(response.data.results[0].background_image);
+      const response = await axios.post('http://localhost:4444/fetchGame/fetchRAWGGame', {gameName: inputValue});
+      setRawgData(response.data);
+      console.log(response.data.rawg_game.results[0].background_image);
+    } catch (error) {
+      console.error('Error fetching game data:', error);
+    }
+  }
+
+  const fetchIGDBGame = async () => {
+    try {
+      const response = await axios.post('http://localhost:4444/fetchGame/fetchIGDBGame', {gameName: inputValue});
+      //setIgdbData(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error('Error fetching game data:', error);
     }
@@ -25,11 +32,11 @@ function App() {
  
   return (
     <div>
-      <form onSubmit={(e) => {e.preventDefault(); fetchGame();}}>
+      <form onSubmit={(e) => {e.preventDefault(); fetchIGDBGame();}}>
       <input type="text" onChange={(e) => setInputValue(e.target.value)} />
-      <button type="button">Fetch Game Data</button>
+      <button type="submit">Fetch Game Data</button>
       </form>
-      {gameData && <img src={gameData?.results[0]?.background_image}/>}
+      {rawgData && <img src={rawgData?.rawg_game?.results[0]?.background_image}/>}
     </div>
   )
 }

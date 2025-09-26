@@ -7,17 +7,29 @@ let twitch_client_id = process.env.TWITCH_CLIENT_ID;
 
 const RAWG_BASE_URL = "https://api.rawg.io/api";
 
-const fetchGame = async (req, res) => {
+const fetchRAWGGame = async (req, res) => {
   const { gameName } = req.body;
   if (!gameName) {
 	return res.status(400).json({ error: "Game name is required" });
   }
   const rawg_game = await getGame_RAWG(gameName);
-  const igdb_game = await getGame_IGDB(gameName);
   if (rawg_game) {
 	console.log("Game found:", rawg_game);
-	console.log("IGDB Data:", igdb_game);
-	return res.status(200).json({rawg : rawg_game, igdb :igdb_game});
+	return res.status(200).json({rawg_game});
+  } else {
+	return res.status(404).json({ error: "Game not found" });
+  }
+}
+
+const fetchIGDBGame = async (req, res) => {
+  const { gameName } = req.body;
+  if (!gameName) {
+	return res.status(400).json({ error: "Game name is required" });
+  }
+  const igdb_game = await getGameIGDB(gameName);
+  if (igdb_game) {
+	console.log("Game found:", igdb_game);
+	return res.status(200).json({igdb_game});
   } else {
 	return res.status(404).json({ error: "Game not found" });
   }
@@ -55,7 +67,7 @@ async function getIGDB_AcessToken(){
   
 }
 
-async function getGame_IGDB(gameName) {
+async function getID_IGDB(gameName) {
 	const token = await getIGDB_AcessToken();
 
   const res = await axios.post(
@@ -68,9 +80,30 @@ async function getGame_IGDB(gameName) {
         "Accept": "application/json"
       }
     });
-	  console.log(res.data);
-} 
+	  console.log(res.data[0].id);	
+	  return(res.data[0].id);
+}
+
+async function getGameIGDB(gameName) {
+  const token = await getIGDB_AcessToken();
+  const gameId = await getID_IGDB(gameName);
+
+  const res = await axios.post(
+    "https://api.igdb.com/v4/games",
+    "fields name, summary, genres.name, platforms.name, first_release_date; where id = " + gameId + "",
+    {
+      headers: {
+        "Client-ID": twitch_client_id,
+        "Authorization": `Bearer ${token}`,
+        "Accept": "application/json",
+      }
+    }
+  );
+  console.log(res.data);
+  return(res.data);
+}
 
 	module.exports = { 
-		fetchGame
+		fetchRAWGGame,
+		fetchIGDBGame
 	}
