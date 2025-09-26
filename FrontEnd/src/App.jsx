@@ -7,13 +7,17 @@ function App() {
   
   const [gameData, setGameData] = useState(null);
   const [inputValue, setInputValue] = useState('');
+  const [rawgData, setRawgData] = useState(null);
+  const [igdbData, setIgdbData] = useState(null);
+  console.log(rawgData);
+  console.log(igdbData);
 
   const fetchGame = async () => {
     try {
       const response = await axios.post('http://localhost:4444/fetchGame', {gameName: inputValue});
-      setGameData(response.data);
+      setRawgData(response.data.rawg);
+      setIgdbData(response.data.igdb);
       console.log(response.data.results[0].background_image);
-
     } catch (error) {
       console.error('Error fetching game data:', error);
     }

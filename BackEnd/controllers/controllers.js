@@ -13,8 +13,11 @@ const fetchGame = async (req, res) => {
 	return res.status(400).json({ error: "Game name is required" });
   }
   const rawg_game = await getGame_RAWG(gameName);
+  const igdb_game = await getGame_IGDB(gameName);
   if (rawg_game) {
-	return res.status(200).json(rawg_game);
+	console.log("Game found:", rawg_game);
+	console.log("IGDB Data:", igdb_game);
+	return res.status(200).json({rawg : rawg_game, igdb :igdb_game});
   } else {
 	return res.status(404).json({ error: "Game not found" });
   }
@@ -37,7 +40,7 @@ async function getGame_RAWG(gameName) {
   }
 }
 
-/* async function getIGDB_AcessToken(){
+async function getIGDB_AcessToken(){
 	const url = "https://id.twitch.tv/oauth2/token";
 
   const res = await axios.post(url, null, {
@@ -60,13 +63,13 @@ async function getGame_IGDB(gameName) {
     `search "${gameName}"; fields id, name; limit 5;`,
     {
       headers: {
-        "Client-ID": "YOUR_CLIENT_ID",
+        "Client-ID": twitch_client_id,
         "Authorization": `Bearer ${token}`,
         "Accept": "application/json"
       }
     });
 	  console.log(res.data);
-} */
+} 
 
 	module.exports = { 
 		fetchGame
