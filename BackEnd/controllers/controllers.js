@@ -4,6 +4,7 @@ const { get } = require('mongoose');
 let rawg_key =process.env.RAWG_API_KEY;
 let igdb_key = process.env.IGDB_API_KEY;
 let twitch_client_id = process.env.TWITCH_CLIENT_ID;
+let gameShark_key = process.env.GAME_SHARK_KEY;
 
 const RAWG_BASE_URL = "https://api.rawg.io/api";
 
@@ -67,12 +68,12 @@ async function getIGDB_AcessToken(){
   
 }
 
-async function getID_IGDB(gameName) {
+async function getGameIGDB(gameName) {
 	const token = await getIGDB_AcessToken();
 
   const res = await axios.post(
     "https://api.igdb.com/v4/games",
-    `search "${gameName}"; fields id, name; limit 5;`,
+    `search "${gameName}"; fields id, name, summary, genres.name, platforms.name, first_release_date, cover; limit 5;`,
     {
       headers: {
         "Client-ID": twitch_client_id,
@@ -80,30 +81,43 @@ async function getID_IGDB(gameName) {
         "Accept": "application/json"
       }
     });
-	  console.log(res.data[0].id);	
-	  return(res.data[0].id);
+
+	const coverURL = await axios.post(
+		"https://api.igdb.com/v4/covers",
+		`fields url; where id = (${res.data[0].cover});`,
+		{
+		  headers: {
+			"Client-ID": twitch_client_id,
+			"Authorization": `Bearer ${token}`,
+			"Accept": "application/json"
+		  }
+		});
+
+	  console.log(coverURL);	
+	  return({game: res.data[0].name, cover: coverURL.data[0].url});
 }
 
-async function getGameIGDB(gameName) {
-  const token = await getIGDB_AcessToken();
-  const gameId = await getID_IGDB(gameName);
+async function getGameSharkDeals(req, res){
 
-  const res = await axios.post(
-    "https://api.igdb.com/v4/games",
-    "fields name, summary, genres.name, platforms.name, first_release_date; where id = " + gameId + "",
-    {
-      headers: {
-        "Client-ID": twitch_client_id,
-        "Authorization": `Bearer ${token}`,
-        "Accept": "application/json",
-      }
-    }
-  );
-  console.log(res.data);
-  return(res.data);
+  var config = {
+	method: 'get',
+	maxBodyLength: Infinity,
+	url: 'https://www.cheapshark.com/api/1.0/games?title=' + req.query.gameName + '&limit=1&exact=0',
+	headers: { }
+};
+
+axios(config)
+.then(function (response) {
+  console.log(response.data);
+  res.send(response.data);
+})
+.catch(function (error) {
+  console.log(error);
+});
 }
 
 	module.exports = { 
 		fetchRAWGGame,
-		fetchIGDBGame
+		fetchIGDBGame,
+		getGameSharkDeals
 	}

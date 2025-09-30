@@ -21,5 +21,6 @@ connectingToDB()
 app.use(require('cors')())
 
 app.use('/fetchGame', require('./routes/routes.js'))
+app.use('/users', require('./routes/users.routes.js'))
 
 app.listen(port, () => console.log("Listening on port: " + port));
