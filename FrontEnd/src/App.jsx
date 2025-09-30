@@ -3,7 +3,9 @@ import axios from 'axios'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { URL } from './config'
-import * as jose from 'jose'
+import login from './helpers/login'
+import logout from './helpers/logout'
+import { set } from 'mongoose'
 
 function App() {
   
@@ -20,7 +22,7 @@ useEffect(() => {
         } else {
           axios.defaults.headers.common["Authorization"] = token;
           const response = await axios.post(`${URL}/users/verify_token`);
-          return response.data.ok ? login(token) : logout();
+          return response.data.ok ? login(token, setUser, setIsLoggedIn) : logout(setIsLoggedIn);
         }
       } catch (error) {
         console.log(error);
@@ -28,26 +30,6 @@ useEffect(() => {
     };
     verify_token();
   }, [token]);
-
-  const login = (token) => {
-    debugger
-    let decodedToken = jose.decodeJwt(token);
-    // composing a user object based on what data we included in our token (login controller - jwt.sign() first argument)
-    let user = {
-      email: decodedToken.userEmail,
-    };
-    localStorage.setItem("token", JSON.stringify(token));
-    localStorage.setItem("user", JSON.stringify(user));
-    setUser(user)
-    setIsLoggedIn(true);
-  };
-  
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setIsLoggedIn(false);
-  };
-
    
   const [gameData, setGameData] = useState(null);
   const [inputValue, setInputValue] = useState('');

@@ -1,4 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
+import fetchRAWGGame from "./controllers/controllers.js";
+import fetchIGDBGame from "./controllers/controllers.js";
 
 // The client gets the API key from the environment variable `GEMINI_API_KEY`.
 const ai = new GoogleGenAI({});
@@ -57,7 +59,7 @@ Schema:
 }
 
 Context (from external sources and/or lookup):
-[${gameName} + ANY RETRIEVED DATA HERE]
+[${gameName} + ${JSON.stringify(await fetchRAWGGame(gameName))} + ${JSON.stringify(await fetchIGDBGame(gameName))} + ]
 
 Return JSON only.
 `;

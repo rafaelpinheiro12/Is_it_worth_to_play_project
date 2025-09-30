@@ -4,7 +4,6 @@ const { get } = require('mongoose');
 let rawg_key =process.env.RAWG_API_KEY;
 let igdb_key = process.env.IGDB_API_KEY;
 let twitch_client_id = process.env.TWITCH_CLIENT_ID;
-let gameShark_key = process.env.GAME_SHARK_KEY;
 
 const RAWG_BASE_URL = "https://api.rawg.io/api";
 
@@ -102,7 +101,7 @@ async function getGameSharkDeals(req, res){
   var config = {
 	method: 'get',
 	maxBodyLength: Infinity,
-	url: 'https://www.cheapshark.com/api/1.0/games?title=' + req.query.gameName + '&limit=1&exact=0',
+	url: 'https://www.cheapshark.com/api/1.0/games?title=' + req.query.gameName + '&limit=5&exact=0',
 	headers: { }
 };
 
