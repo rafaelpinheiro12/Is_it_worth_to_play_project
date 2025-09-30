@@ -7,8 +7,8 @@ let twitch_client_id = process.env.TWITCH_CLIENT_ID;
 
 const RAWG_BASE_URL = "https://api.rawg.io/api";
 
-const fetchRAWGGame = async (req, res) => {
-  const { gameName } = req.body;
+const fetchRAWGGame = async (req, res, gameTitle) => {
+  const gameName = req?.body?.gameName || gameTitle;
   if (!gameName) {
 	return res.status(400).json({ error: "Game name is required" });
   }
@@ -21,8 +21,8 @@ const fetchRAWGGame = async (req, res) => {
   }
 }
 
-const fetchIGDBGame = async (req, res) => {
-  const { gameName } = req.body;
+const fetchIGDBGame = async (req, res, gameTitle) => {
+  const gameName = req?.body?.gameName || gameTitle;
   if (!gameName) {
 	return res.status(400).json({ error: "Game name is required" });
   }
