@@ -3,16 +3,23 @@ import axios from 'axios'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { URL } from './config'
+import { useAtom } from 'jotai'
+import { isLoggedInAtom, userAtom, tokenAtom, selectedGameAtom } from './State/state'
 import login from './helpers/login'
 import logout from './helpers/logout'
 import MainPage from './Views/MainPage'
+import NavBar from './Components/NavBar'
+import AboutUs_Home from './Views/AboutUs_Home'
+import {BrowserRouter as Router, Route, Routes} from 'react-router'
+import SelectedGame from './Components/SelectedGame'
 
 function App() {
   
-  const [isLoggedIn, setIsLoggedIn] = useState(null);
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
-  const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
-  console.log(token);
+  const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
+  const [user, setUser] = useAtom(userAtom);
+  const [token, setToken] = useAtom(tokenAtom);
+  const [selectedGame, setSelectedGame] = useAtom(selectedGameAtom);
+
 
 useEffect(() => {
     const verify_token = async () => {
@@ -31,29 +38,18 @@ useEffect(() => {
     verify_token();
   }, [token]);
 
- /*  const fetchRAWGGame = async () => {
-    try {
-      const response = await axios.post('http://localhost:4444/fetchGame/fetchRAWGGame', {gameName: inputValue});
-      setRawgData(response.data);
-      console.log(response.data.rawg_game.results[0].background_image);
-    } catch (error) {
-      console.error('Error fetching game data:', error);
-    }
-  }
+  
 
-  const fetchIGDBGame = async () => {
-    try {
-      const response = await axios.post('http://localhost:4444/fetchGame/fetchIGDBGame', {gameName: inputValue});
-      setIgdbData(response.data);
-      console.log(response.data.igdb_game.cover);
-    } catch (error) {
-      console.error('Error fetching game data:', error);
-    }
-  } */
- 
   return (
     <div>
-      <MainPage/>
+      <Router>
+        <NavBar isLoggedIn={isLoggedIn}/>
+        <Routes>
+          <Route path="/" element={<MainPage/>}/>
+          <Route path="/aboutus" element={<AboutUs_Home/>}/>
+          <Route path="/:gameName" element={<SelectedGame selectedGame = {selectedGame}/>}/>
+        </Routes> 
+      </Router>
     </div>
   )
 }

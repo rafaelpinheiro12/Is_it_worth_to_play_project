@@ -5,8 +5,10 @@ import { fetchRAWGGame } from "./controllers.js";
 // The client gets the API key from the environment variable `GEMINI_API_KEY`.
 const ai = new GoogleGenAI({});
 
-const main = async (req, res, webRetrivalLayerInfo) => {
+const main = async (req, res,) => {
   const gameName = req.body.gameName;
+  const igdbData = req.body.igdbData;
+  const rawgData = req.body.rawgData;
   const prompt = `
 
  You are an assistant that produces structured JSON summaries about video games.
@@ -67,7 +69,7 @@ Schema:
 }
 
 Context (from external sources and/or lookup):
-[${gameName} + ${webRetrivalLayerInfo} ANY CONTEXT DATA HERE]
+[${gameName} + ${igdbData} + ${rawgData} + ANY CONTEXT DATA HERE]
 
 Return JSON only.
 `;
