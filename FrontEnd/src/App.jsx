@@ -36,7 +36,7 @@ useEffect(() => {
   const [igdbData, setIgdbData] = useState(null);
 
 
-  const fetchRAWGGame = async () => {
+ /*  const fetchRAWGGame = async () => {
     try {
       const response = await axios.post('http://localhost:4444/fetchGame/fetchRAWGGame', {gameName: inputValue});
       setRawgData(response.data);
@@ -54,16 +54,11 @@ useEffect(() => {
     } catch (error) {
       console.error('Error fetching game data:', error);
     }
-  }
+  } */
  
   return (
     <div>
-      <form onSubmit={(e) => {e.preventDefault(); fetchIGDBGame();}}>
-      <input type="text" onChange={(e) => setInputValue(e.target.value)} />
-      <button type="submit">Fetch Game Data</button>
-      </form>
-      {igdbData && <img src={`https:${igdbData?.igdb_game?.cover}`}/>}
-      {rawgData && <img src={rawgData?.rawg_game?.results[0]?.background_image}/>}
+      
     </div>
   )
 }

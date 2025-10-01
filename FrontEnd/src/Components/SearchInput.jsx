@@ -1,0 +1,19 @@
+import axios from "axios";
+
+ const fetchSuggestions = async ({query, setSuggestions, setShowSuggestions}) => {
+    if (!query || query.trim().length < 2) return;
+
+    try {
+      const response = await axios.get(`http://localhost:4444/api/games/suggestions`, {
+        params: { query: query.trim() }
+      });
+      
+      setSuggestions(response.data.results || []);
+      setShowSuggestions(true);
+    } catch (error) {
+      console.error('Error fetching suggestions:', error);
+      setSuggestions([]);
+  };
+}
+
+export default fetchSuggestions;
