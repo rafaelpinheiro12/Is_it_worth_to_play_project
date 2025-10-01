@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import { URL } from './config'
 import login from './helpers/login'
 import logout from './helpers/logout'
+import MainPage from './Views/MainPage'
 
 function App() {
   
@@ -29,12 +30,6 @@ useEffect(() => {
     };
     verify_token();
   }, [token]);
-   
-  const [gameData, setGameData] = useState(null);
-  const [inputValue, setInputValue] = useState('');
-  const [rawgData, setRawgData] = useState(null);
-  const [igdbData, setIgdbData] = useState(null);
-
 
  /*  const fetchRAWGGame = async () => {
     try {
@@ -58,7 +53,7 @@ useEffect(() => {
  
   return (
     <div>
-      
+      <MainPage/>
     </div>
   )
 }

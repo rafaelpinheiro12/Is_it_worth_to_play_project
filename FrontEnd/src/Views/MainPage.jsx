@@ -1,4 +1,5 @@
 import SearchInput from '../Components/SearchInput'
+import { useState, useEffect } from 'react'
 
 function MainPage() {
 

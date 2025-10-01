@@ -4,7 +4,7 @@ import axios from "axios";
     if (!query || query.trim().length < 2) return;
 
     try {
-      const response = await axios.get(`http://localhost:4444/api/games/suggestions`, {
+      const response = await axios.post(`http://localhost:4444/fetchGame/searchInputHandler`,{}, {
         params: { query: query.trim() }
       });
       
