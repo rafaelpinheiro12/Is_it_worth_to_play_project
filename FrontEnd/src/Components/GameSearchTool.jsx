@@ -1,0 +1,55 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router';
+import SearchInput from './SearchInput.jsx'
+import {useAtom} from 'jotai'
+import {selectedGameAtom} from '../State/state'
+
+function GameSearchTool() {
+
+    const [suggestions, setSuggestions] = useState([]);
+const [showSuggestions, setShowSuggestions] = useState(false);
+const [query, setQuery] = useState('');
+const [selectedSuggestion, setSelectedSuggestion] = useAtom(selectedGameAtom);
+
+const navigate = useNavigate();
+
+useEffect(() => {
+    if (!query.trim()) {
+        setSuggestions([]);
+        setShowSuggestions(false);
+        return;
+    }
+
+    const debounceTimer = setTimeout(() => {
+        SearchInput({ query, setSuggestions, setShowSuggestions });
+    }, 300);
+
+    return () => {
+        clearTimeout(debounceTimer);
+    };
+}, [query]);
+
+  return (
+    <>
+      <input className="search-input" type="text" value={query} onChange={(e) => setQuery(e.target.value)} />
+      <div className="search-input-dropdown">
+        {showSuggestions && suggestions.length > 0 && (
+          <ul >
+            {suggestions.map((suggestion) => (
+              <div className="suggestion" key={suggestion.id} onClick={() => {
+                setQuery("");
+                setShowSuggestions(false);
+                setSelectedSuggestion(suggestion);
+                navigate(`/${suggestion.name}`);
+              }}>
+                <img className="suggestion-image" src={suggestion.background_image} alt={suggestion.name} />
+                <li>{suggestion.name}</li>
+              </div>
+            ))}
+          </ul>)}
+      </div>
+    </>
+  )
+}
+
+export default GameSearchTool
