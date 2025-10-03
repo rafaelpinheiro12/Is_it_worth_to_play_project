@@ -2,8 +2,14 @@ import { useState, useEffect, use } from 'react'
 import axios from 'axios'
 import {useAtom} from 'jotai'
 import {selectedGameAtom, igdbDataAtom, aiDataAtom} from '../State/state'
+import {useParams} from 'react-router'
 
 function SelectedGame({selectedGame}) {
+
+    if (!selectedGame) {
+        const {gameName} = useParams();
+        selectedGame = {name: gameName};
+    }
 
     const [game, setGame] = useAtom(selectedGameAtom);
     const [igdbData, setIgdbData] = useAtom(igdbDataAtom);
@@ -51,7 +57,13 @@ function SelectedGame({selectedGame}) {
             <div>
                 <h2>{game.name}</h2>
                 <p>IGDB Data: {igdbData ? JSON.stringify(igdbData) : 'Loading...'}</p>
-                <p>AI Data: {aiData ? JSON.stringify(aiData) : 'Loading...'}</p>
+                {console.log("IGDB Data in render:", igdbData)}
+                {console.log("AI Data in render:", aiData)}
+                <div>
+                <p>AI Data: {aiData ? 'AI Data here' : 'Loading...'}</p>
+                <img src={igdbData ? igdbData.igdb_game.cover : 'photo not found'} alt="igdb cover trust me" />
+                <p>{aiData ? aiData.worth_playing : 'Loading...'}</p>
+                </div>
             </div>
         )}
     </div>

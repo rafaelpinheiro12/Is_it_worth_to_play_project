@@ -34,7 +34,10 @@ const register = async (req, res) => {
       password: hash,
     };
     await User.create(newUser);
-    res.json({ ok: true, message: "Successfully registered" });
+      const token = jwt.sign({ userEmail: newUser.email }, jwt_secret, {
+        expiresIn: "356d",
+      });
+    res.json({ ok: true, message: "Successfully registered", token: token });
   } catch (error) {
     console.log(error);
     res.json({ ok: false, error });

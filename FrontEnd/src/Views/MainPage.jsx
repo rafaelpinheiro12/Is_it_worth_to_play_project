@@ -2,7 +2,7 @@ import SearchInput from '../Components/SearchInput'
 import { useState, useEffect } from 'react'
 import "../App.css"
 import SelectedGame from '../Components/SelectedGame';
-import { Navigate } from 'react-router';
+import { useNavigate } from 'react-router';
 
 function MainPage() {
 
@@ -10,6 +10,8 @@ const [suggestions, setSuggestions] = useState([]);
 const [showSuggestions, setShowSuggestions] = useState(false);
 const [query, setQuery] = useState('');
 const [selectedSuggestion, setSelectedSuggestion] = useState(null);
+
+const navigate = useNavigate();
 
 useEffect(() => {
     if (!query.trim()) {
@@ -29,7 +31,7 @@ useEffect(() => {
 
   return (
     <div>
-      <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} />
+      <input className="search-input" type="text" value={query} onChange={(e) => setQuery(e.target.value)} />
       <div>
         {showSuggestions && suggestions.length > 0 && (
           <ul>
@@ -38,7 +40,7 @@ useEffect(() => {
                 setQuery("");
                 setShowSuggestions(false);
                 setSelectedSuggestion(suggestion);
-                <Navigate to={`/${suggestion.name}`}/>;
+                navigate(`/${suggestion.name}`);
               }}>
                 <img className="suggestion-image" src={suggestion.background_image} alt={suggestion.name} />
                 <li>{suggestion.name}</li>

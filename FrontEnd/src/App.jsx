@@ -5,13 +5,13 @@ import { useEffect } from 'react'
 import { URL } from './config'
 import { useAtom } from 'jotai'
 import { isLoggedInAtom, userAtom, tokenAtom, selectedGameAtom } from './State/state'
-import login from './helpers/login'
-import logout from './helpers/logout'
 import MainPage from './Views/MainPage'
 import NavBar from './Components/NavBar'
 import AboutUs_Home from './Views/AboutUs_Home'
 import {BrowserRouter as Router, Route, Routes} from 'react-router'
 import SelectedGame from './Components/SelectedGame'
+import * as jose from 'jose'
+import Login from './Views/Login'
 
 function App() {
   
@@ -20,6 +20,9 @@ function App() {
   const [token, setToken] = useAtom(tokenAtom);
   const [selectedGame, setSelectedGame] = useAtom(selectedGameAtom);
 
+  console.log("App token:", token);
+  console.log("App isLoggedIn:", isLoggedIn);
+  console.log("App user:", user);
 
 useEffect(() => {
     const verify_token = async () => {
@@ -38,6 +41,23 @@ useEffect(() => {
     verify_token();
   }, [token]);
 
+    const login = (token) => {
+      let decodedToken = jose.decodeJwt(token);
+      let user = {
+        email: decodedToken.userEmail,
+      };
+      localStorage.setItem("token", JSON.stringify(token));
+      localStorage.setItem("user", JSON.stringify(user));
+      setUser(user)
+      setIsLoggedIn(true);
+      setToken(token);
+    };
+
+    const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+  };
   
 
   return (
@@ -47,6 +67,7 @@ useEffect(() => {
         <Routes>
           <Route path="/" element={<MainPage/>}/>
           <Route path="/aboutus" element={<AboutUs_Home/>}/>
+          <Route path="/user" element={<Login login = {login}/>}/>
           <Route path="/:gameName" element={<SelectedGame selectedGame = {selectedGame}/>}/>
         </Routes> 
       </Router>

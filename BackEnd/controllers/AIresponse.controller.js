@@ -83,7 +83,7 @@ Return JSON only.
   };
 
   const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
+    model: "gemini-2.5-flash-lite",
     contents: prompt,
     thinkingConfig: {
       thinkingBudget: 0,
@@ -92,7 +92,10 @@ Return JSON only.
     config: config,
   });
   console.log(response.text);
-  res.send(response.text);
+  const raw = response.text;
+	const clean = raw.replace(/```json|```/gi, '').trim();
+	const parsed = JSON.parse(clean);
+  res.send(parsed);
 };
 
 export { main };

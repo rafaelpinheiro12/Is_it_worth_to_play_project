@@ -16,3 +16,28 @@
 li{
     list-style: none;
 }
+
+:any-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #606060;
+    padding: 10px;
+}
+
+.search-input {
+    display: flexbox;
+    justify-content: center;
+    align-items: center;
+    background-color: #f2f2f2;
+    width: 50%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
