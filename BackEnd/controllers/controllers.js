@@ -41,7 +41,7 @@ const fetchIGDBGame = async (req, res, gameTitle) => {
     console.log("Game found:", igdb_game);
     return res.status(200).json({ igdb_game });
   } else {
-    return res.status(404).json({ error: "Game not found" });
+    return res.status(200).json({ igdb_game: null });// IGDB does not have data for all games, so we return null if not found
   }
 };
 
@@ -96,36 +96,14 @@ async function getGameIGDB(gameName) {
       },
     }
   );
-  console.log(res.data);
-  const coverURL = `https://images.igdb.com/igdb/image/upload/t_cover_big/${res.data[0].cover.image_id}.jpg`
+  if (!res?.data[0]?.cover?.image_id){return null;}
+  const coverURL = `https://images.igdb.com/igdb/image/upload/t_cover_big/${res.data[0].cover.image_id}.jpg`;
   console.log(coverURL);
   if (!coverURL) return null;
-  return { game: res.data[0].name, cover: coverURL.data[0].url };
-}
-
-async function getGameSharkDeals(req, res) {
-  var config = {
-    method: "get",
-    maxBodyLength: Infinity,
-    url:
-      "https://www.cheapshark.com/api/1.0/games?title=" +
-      req.query.gameName +
-      "&limit=5&exact=0",
-    headers: {},
-  };
-
-  axios(config)
-    .then(function (response) {
-      console.log(response.data);
-      res.send(response.data);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  return { game: res.data[0].name, cover: coverURL };
 }
 
 module.exports = {
   fetchRAWGGame,
   fetchIGDBGame,
-  getGameSharkDeals,
 };

@@ -5,7 +5,6 @@ const router = require('express').Router()
 
      router.post('/fetchRAWGGame', controller.fetchRAWGGame)
      router.post('/fetchIGDBGame', controller.fetchIGDBGame)
-     router.get('/getGameSharkDeals', controller.getGameSharkDeals)
      router.post('/getAIResponse', AIcontroler.main)
      router.post('/searchInputHandler', fetchSuggestions.searchInputHandler)
 

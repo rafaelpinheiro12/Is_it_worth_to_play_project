@@ -38,20 +38,23 @@ function SelectedGame({ selectedGame }) {
             gameName: game.name,
           }
         );
-        if (igdbResponse.data.aiData) { // igdbResponse contains aiData already if its on the database
+        if(!igdbResponse?.data.error){
+          setIgdbData(null);
+        }else{
+          if (igdbResponse?.data?.aiData) { // igdbResponse contains aiData already if its on the database
           setIgdbData(igdbResponse.data.igdbData);
           setAiData(igdbResponse.data.aiData);
           setIsLoading(false);
           return; // If AI data is already present, skip fetching again
         }
         setIgdbData(igdbResponse.data);
-
+        }       
         // Fetch AI response using the fresh IGDB data
         const aiResponse = await axios.post(
           "http://localhost:4444/fetchgame/getAIResponse",
           {
             gameName: game.name,
-            igdbData: igdbResponse.data || null,
+            igdbData: igdbResponse?.data || null,
             rawgData: game,
           }
         );
@@ -82,16 +85,18 @@ function SelectedGame({ selectedGame }) {
               <p>AI Data: {aiData ? "AI Data here" : "No AI data available"}</p>
               <div className="game_info_container">
                 <div className="game_cover">
-                  <img
-                    src={igdbData?.igdb_game?.cover || "photo not found"}
-                    alt="game cover"
+                  <img className="game_cover_img"
+                    src={!igdbData ? game.background_image : igdbData?.igdb_game?.cover ? igdbData?.igdb_game.cover : null}  
+                    alt={`${selectedGame.name} cover image`}
                   />
                 </div>
-                <div>
+                <div className="game_info">
+                  <div className="game_title">
                   <p>
                     Game Name:{" "}
                     {aiData?.title ? aiData.title : "AI analysis not available"}
                   </p>
+                  </div>
                   <div className="game_devs_pub">
                     <p>
                       Developer:{" "}
@@ -102,53 +107,77 @@ function SelectedGame({ selectedGame }) {
                       {aiData?.publisher ? aiData.publisher : "AI analysis not available"}
                     </p>
                   </div>
+                  <div className="game_time_to_beat">
                   <p>
-                    Time to beat :{" "}
-                    {aiData?.time_to_beat.main_story?.min
-                      ? aiData.time_to_beat.main_story.min
+                    Time to beat Story:{" "}
+                    {aiData?.time_to_beat.main_story?.min && aiData?.time_to_beat.main_story?.max
+                      ? aiData.time_to_beat.main_story.min + " - " + aiData.time_to_beat.main_story.max + " hours"
                       : "AI analysis not available"}
                   </p>
                   <p>
+                  Time to beat Extras:{" "}
+                  {aiData?.time_to_beat.extras?.min && aiData?.time_to_beat.extras?.max
+                      ? aiData.time_to_beat.extras.min + " - " + aiData.time_to_beat.extras.max + " hours"
+                      : "AI analysis not available"}
+                  </p>
+                  <p>
+                  Time to beat Completionist:{" "}
+                  {aiData?.time_to_beat.completionist?.min && aiData?.time_to_beat.completionist?.max
+                      ? aiData.time_to_beat.completionist.min + " - " + aiData.time_to_beat.completionist.max + " hours"
+                      : "AI analysis not available"}
+                  </p>   
+                  </div>
+                  <div className="game_critic_stuff">
+                  <p>
                     Critic Score :{" "}
-                    {aiData?.critic_score.score
+                    {aiData?.critic_score?.score
                       ? aiData.critic_score.score
                       : "AI analysis not available"}
                   </p>
                   <p>
                     Critic Summary :{" "}
-                    {aiData?.critic_score.summary
+                    {aiData?.critic_score?.summary
                       ? aiData.critic_score.summary
                       : "AI analysis not available"}
                   </p>
-                  <p>
-                    Player Sentiment - Pros :{" "}
-                    {aiData?.player_sentiment.pros
-                      ? aiData.player_sentiment.pros
-                      : "AI analysis not available"}
-                  </p>
-                  <p>
-                    Player Sentiment - Cons :{" "}
-                    {aiData?.player_sentiment.cons
-                      ? aiData.player_sentiment.cons
-                      : "AI analysis not available"}
-                  </p>
+                  </div>
+                  <div>
+                  <p>Player Sentiment - Pros :</p>
+                  <ul>
+                    {aiData?.player_sentiment?.pros
+                      ? aiData.player_sentiment.pros.map((pro, index) => (
+                          <li key={index}>{pro}</li>
+                        ))
+                      : "AI analysis not available"}  
+                  </ul>
+                  </div>
+                  <div>
+                  <p>Player Sentiment - Cons :</p>
+                  <ul>
+                    {aiData?.player_sentiment?.cons
+                      ? aiData.player_sentiment.cons.map((con, index) => (
+                          <li key={index}>{con}</li>
+                        ))
+                      : "AI analysis not available"}  
+                  </ul>
+                  </div>
                   <p>
                     Price Range :{" "}
-                    {aiData?.price.range ? aiData.price.range : "AI analysis not available"}
+                    {aiData?.price?.range ? aiData.price.range : "AI analysis not available"}
                   </p>
                   <p>
                     Price Deals :{" "}
-                    {aiData?.price.deals ? aiData.price.deals : "AI analysis not available"}
+                    {aiData?.price?.deals ? aiData.price.deals : "AI analysis not available"}
                   </p>
                   <p>
                     Preferred Platform :{" "}
-                    {aiData?.most_preferred_platform.platform
+                    {aiData?.most_preferred_platform?.platform
                       ? aiData.most_preferred_platform.platform
                       : "AI analysis not available"}
                   </p>
                   <p>
                     Reason :{" "}
-                    {aiData?.most_preferred_platform.reason
+                    {aiData?.most_preferred_platform?.reason
                       ? aiData.most_preferred_platform.reason
                       : "AI analysis not available"}
                   </p>

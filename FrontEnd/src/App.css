@@ -58,19 +58,63 @@ li{
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: flex-start;
     margin: 100px;
+    background-color: #b6b6b6;
+    padding: 20px;
+    border-radius: 10px;
 }
 
 .game_cover {
+    align-items: center;
     width: 30%;
-    height: 100%;
-    object-fit: cover;
     border-radius: 10px;
     margin-right: 20px;
+    overflow: hidden;
+}
+
+.game_cover_img {
+    object-fit: cover;
+    max-width: fit-content;
+    max-height: fit-content;
+}
+
+.game_info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1%;
+    max-width: 70%;
+}
+
+.game_title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
 .game_devs_pub{
     display: flex;
     flex-direction: row;
     gap: 10px;
+}
+
+.game_time_to_beat{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.game_critic_stuff{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
 }
