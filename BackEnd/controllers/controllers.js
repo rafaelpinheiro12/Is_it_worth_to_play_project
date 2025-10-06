@@ -72,7 +72,7 @@ async function getGameIGDB(gameName) {
 
   const res = await axios.post(
     "https://api.igdb.com/v4/games",
-    `search "${gameName}"; fields id, name, summary, genres.name, platforms.name, first_release_date, cover; limit 5;`,
+    `search "${gameName}"; fields id, name, summary, genres.name, platforms.name, first_release_date, cover, artworks; limit 5;`,
     {
       headers: {
         "Client-ID": twitch_client_id,
@@ -83,7 +83,7 @@ async function getGameIGDB(gameName) {
 
 	const coverURL = await axios.post(
 		"https://api.igdb.com/v4/covers",
-		`fields url; where id = (${res.data[0].cover});`,
+		`fields url; where id = (${res?.data[0]?.cover});`,
 		{
 		  headers: {
 			"Client-ID": twitch_client_id,
@@ -92,8 +92,23 @@ async function getGameIGDB(gameName) {
 		  }
 		});
 
-	  console.log(coverURL);	
+    const artworks = await axios.post(
+    "https://api.igdb.com/v4/artworks",
+    `fields url; where id = (${res?.data[0]?.artworks});`,
+    {
+      headers: {
+        "Client-ID": twitch_client_id,
+        "Authorization": `Bearer ${token}`,
+        "Accept": "application/json"
+      }
+    });
+
+   
+    console.log(artworks.data);
+	  console.log(coverURL);
+    if(coverURL.data.length === 0) return(null);
 	  return({game: res.data[0].name, cover: coverURL.data[0].url});
+
 }
 
 async function getGameSharkDeals(req, res){

@@ -68,7 +68,7 @@ Schema:
   "worth_playing": "string or null"
 }
 
-Context (from external sources and/or lookup):
+Context to use if available (from external sources and/or lookup):
 [${gameName} + ${igdbData} + ${rawgData} + ANY CONTEXT DATA HERE]
 
 Return JSON only.
@@ -94,6 +94,7 @@ Return JSON only.
   console.log(response.text);
   const raw = response.text;
 	const clean = raw.replace(/```json|```/gi, '').trim();
+  console.log(clean);
 	const parsed = JSON.parse(clean);
   res.send(parsed);
 };

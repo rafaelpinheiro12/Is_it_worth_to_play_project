@@ -6,15 +6,15 @@ import {useParams} from 'react-router'
 
 function SelectedGame({selectedGame}) {
 
-    if (!selectedGame) {
-        const {gameName} = useParams();
-        selectedGame = {name: gameName};
-    }
-
-    const [game, setGame] = useState(''); // obj with all game name from rawg
+    const [game, setGame] = useAtom(selectedGameAtom); // obj with all game name from rawg
     const [igdbData, setIgdbData] = useAtom(igdbDataAtom); // obj with all game info from igdb
     const [aiData, setAiData] = useAtom(aiDataAtom); // obj with all ai response info
     const [isLoading, setIsLoading] = useState(false);
+
+       if (!selectedGame) {
+        const {gameName} = useParams();
+        setGame ({name: gameName});
+    }
 
     // Main effect that handles the entire data fetching flow
     useEffect(() => {
@@ -22,15 +22,13 @@ function SelectedGame({selectedGame}) {
             if (!selectedGame?.name || isLoading) return;
 
             // Only update if the game has actually changed
-            if (game?.name === selectedGame.name) return;
+            //if (game?.name === selectedGame.name) return;
 
             setIsLoading(true);
             console.log('Starting fetch for:', selectedGame.name);
 
             try {
 
-                // Update the game object
-                setGame(selectedGame);
 
                 // Reset previous data
                 setIgdbData(null);
@@ -45,7 +43,7 @@ function SelectedGame({selectedGame}) {
                 // Fetch AI response using the fresh IGDB data
                 const aiResponse = await axios.post('http://localhost:4444/fetchgame/getAIResponse', {
                     gameName: game.name,
-                    igdbData: igdbResponse.data,
+                    igdbData: !igdbData || !igdbResponse.data ? {} : igdbData,
                     rawgData: game
                 });
                 setAiData(aiResponse.data);
@@ -58,7 +56,7 @@ function SelectedGame({selectedGame}) {
         };
 
         fetchGameData();
-    }, [selectedGame?.name]); // Only depend on the game name changing
+    }, [game.name]); // Only depend on the game name changing
 
   return (
     <div>
@@ -70,10 +68,29 @@ function SelectedGame({selectedGame}) {
                 ) : (
                     <>
                         <p>IGDB Data: {igdbData ? JSON.stringify(igdbData) : 'No IGDB data available'}</p>
-                        <div>
-                            <p>AI Data: {aiData ? 'AI Data here' : 'No AI data available'}</p>
+                        <p>AI Data: {aiData ? 'AI Data here' : 'No AI data available'}</p>
+                        <div className='game_info_container'>
+                            <div className='game_cover'>
                             <img src={igdbData?.igdb_game?.cover || 'photo not found'} alt="game cover" />
+                            </div>
+                            <div>
+                            <p>Game Name: {aiData ? aiData.name : 'AI analysis not available'}</p>
+                            <div className='game_devs_pub'>
+                            <p>Developer: {aiData ? aiData.developer : 'AI analysis not available'}</p>
+                            <p>Publisher: {aiData ? aiData.publisher : 'AI analysis not available'}</p>
+                            </div>
+                            <p>Time to beat : {aiData ? aiData.time_to_beat.main_story.min : 'AI analysis not available'}</p>
+                            <p>Critic Score : {aiData ? aiData.critic_score.score : 'AI analysis not available'}</p>
+                            <p>Critic Summary : {aiData ? aiData.critic_score.summary : 'AI analysis not available'}</p>
+                            <p>Player Sentiment - Pros : {aiData ? aiData.player_sentiment.pros : 'AI analysis not available'}</p>
+                            <p>Player Sentiment - Cons : {aiData ? aiData.player_sentiment.cons : 'AI analysis not available'}</p>
+                            <p>Price Range : {aiData ? aiData.price.range : 'AI analysis not available'}</p>
+                            <p>Price Deals : {aiData ? aiData.price.deals : 'AI analysis not available'}</p>
+                            <p>Preferred Platform : {aiData ? aiData.most_preferred_platform.platform : 'AI analysis not available'}</p>
+                            <p>Reason : {aiData ? aiData.most_preferred_platform.reason : 'AI analysis not available'}</p>
+                            <p>Not Recommended Platforms : {aiData ? JSON.stringify(aiData.not_recommended_platforms) : 'AI analysis not available'}</p>
                             <p>{aiData ? aiData.worth_playing : 'AI analysis not available'}</p>
+                            </div>
                         </div>
                     </>
                 )}
