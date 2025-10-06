@@ -28,9 +28,9 @@ const fetchIGDBGame = async (req, res, gameTitle) => {
     return res.status(400).json({ error: "Game name is required" });
   }
   // Check if game data already exists in the database before making API call and sets igdbdata response to that
-  const response = GameData.find({ gameName: gameName });
-  if (response) {
-    return res.status(200).json(response);
+  const response = await GameData.find({ gameName: gameName });
+  if (response[0] && response[0].timeStamp > Date.now() - 604800000) {
+    return res.status(200).json(response[0]);
   }
   const igdb_game = await getGameIGDB(gameName);
   if (igdb_game) {

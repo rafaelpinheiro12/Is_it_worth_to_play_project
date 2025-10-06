@@ -3,7 +3,6 @@ import axios from "axios";
 import { useAtom } from "jotai";
 import { selectedGameAtom, igdbDataAtom, aiDataAtom } from "../State/state";
 import { useParams } from "react-router";
-import { set } from "mongoose";
 
 function SelectedGame({ selectedGame }) {
   const [game, setGame] = useAtom(selectedGameAtom); // obj with all game name from rawg
@@ -39,9 +38,9 @@ function SelectedGame({ selectedGame }) {
             gameName: game.name,
           }
         );
-        if (igdbResponse.aiData) {
-          setIgdbData(igdbResponse.igdbData);
-          setAiData(igdbResponse.aiData);
+        if (igdbResponse.data.aiData[0]) { // igdbResponse contains aiData already if its on the database
+          setIgdbData(igdbResponse.data.igdbData[0]);
+          setAiData(igdbResponse.data.aiData[0]);
           setIsLoading(false);
           return; // If AI data is already present, skip fetching again
         }

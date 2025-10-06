@@ -9,16 +9,20 @@ const mongoose = require('mongoose')
 		   unique   : true
 		},
 		igdbData: { 
-		   type     : Array, 
+		   type     : Schema.Types.Mixed, 
 		   required : true
 		},
 		rawgData: { 
-		   type     : Array, 
+		   type     : Schema.Types.Mixed, 
 		   required : true
 		},
 		aiData: { 
-		   type     : Object, 
+		   type     : Schema.Types.Mixed, 
 		   required : true
+		},
+		timeStamp: {
+		type: Date,
+		default: Date.now
 		}
 	});
 
