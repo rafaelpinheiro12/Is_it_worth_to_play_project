@@ -51,7 +51,7 @@ function SelectedGame({ selectedGame }) {
           "http://localhost:4444/fetchgame/getAIResponse",
           {
             gameName: game.name,
-            igdbData: igdbData || null,
+            igdbData: igdbResponse.data || null,
             rawgData: game,
           }
         );
@@ -90,76 +90,76 @@ function SelectedGame({ selectedGame }) {
                 <div>
                   <p>
                     Game Name:{" "}
-                    {aiData ? aiData.name : "AI analysis not available"}
+                    {aiData?.title ? aiData.title : "AI analysis not available"}
                   </p>
                   <div className="game_devs_pub">
                     <p>
                       Developer:{" "}
-                      {aiData ? aiData.developer : "AI analysis not available"}
+                      {aiData?.developer ? aiData.developer : "AI analysis not available"}
                     </p>
                     <p>
                       Publisher:{" "}
-                      {aiData ? aiData.publisher : "AI analysis not available"}
+                      {aiData?.publisher ? aiData.publisher : "AI analysis not available"}
                     </p>
                   </div>
                   <p>
                     Time to beat :{" "}
-                    {aiData
+                    {aiData?.time_to_beat.main_story?.min
                       ? aiData.time_to_beat.main_story.min
                       : "AI analysis not available"}
                   </p>
                   <p>
                     Critic Score :{" "}
-                    {aiData
+                    {aiData?.critic_score.score
                       ? aiData.critic_score.score
                       : "AI analysis not available"}
                   </p>
                   <p>
                     Critic Summary :{" "}
-                    {aiData
+                    {aiData?.critic_score.summary
                       ? aiData.critic_score.summary
                       : "AI analysis not available"}
                   </p>
                   <p>
                     Player Sentiment - Pros :{" "}
-                    {aiData
+                    {aiData?.player_sentiment.pros
                       ? aiData.player_sentiment.pros
                       : "AI analysis not available"}
                   </p>
                   <p>
                     Player Sentiment - Cons :{" "}
-                    {aiData
+                    {aiData?.player_sentiment.cons
                       ? aiData.player_sentiment.cons
                       : "AI analysis not available"}
                   </p>
                   <p>
                     Price Range :{" "}
-                    {aiData ? aiData.price.range : "AI analysis not available"}
+                    {aiData?.price.range ? aiData.price.range : "AI analysis not available"}
                   </p>
                   <p>
                     Price Deals :{" "}
-                    {aiData ? aiData.price.deals : "AI analysis not available"}
+                    {aiData?.price.deals ? aiData.price.deals : "AI analysis not available"}
                   </p>
                   <p>
                     Preferred Platform :{" "}
-                    {aiData
+                    {aiData?.most_preferred_platform.platform
                       ? aiData.most_preferred_platform.platform
                       : "AI analysis not available"}
                   </p>
                   <p>
                     Reason :{" "}
-                    {aiData
+                    {aiData?.most_preferred_platform.reason
                       ? aiData.most_preferred_platform.reason
                       : "AI analysis not available"}
                   </p>
                   <p>
                     Not Recommended Platforms :{" "}
-                    {aiData
+                    {aiData?.not_recommended_platforms
                       ? JSON.stringify(aiData.not_recommended_platforms)
                       : "AI analysis not available"}
                   </p>
                   <p>
-                    {aiData
+                    {aiData?.worth_playing 
                       ? aiData.worth_playing
                       : "AI analysis not available"}
                   </p>

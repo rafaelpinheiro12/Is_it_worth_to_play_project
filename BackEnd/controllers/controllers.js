@@ -87,7 +87,7 @@ async function getGameIGDB(gameName) {
 
   const res = await axios.post(
     "https://api.igdb.com/v4/games",
-    `search "${gameName}"; fields id, name, summary, genres.name, platforms.name, first_release_date, cover, artworks; limit 5;`,
+    `search "${gameName}"; fields id, name, cover.image_id; limit 5;`,
     {
       headers: {
         "Client-ID": twitch_client_id,
@@ -96,34 +96,10 @@ async function getGameIGDB(gameName) {
       },
     }
   );
-
-  const coverURL = await axios.post(
-    "https://api.igdb.com/v4/covers",
-    `fields url; where id = (${res?.data[0]?.cover});`,
-    {
-      headers: {
-        "Client-ID": twitch_client_id,
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    }
-  );
-
-  const artworks = await axios.post(
-    "https://api.igdb.com/v4/artworks",
-    `fields url; where id = (${res?.data[0]?.artworks});`,
-    {
-      headers: {
-        "Client-ID": twitch_client_id,
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    }
-  );
-
-  console.log(artworks.data);
+  console.log(res.data);
+  const coverURL = `https://images.igdb.com/igdb/image/upload/t_cover_big/${res.data[0].cover.image_id}.jpg`
   console.log(coverURL);
-  if (coverURL.data.length === 0) return null;
+  if (!coverURL) return null;
   return { game: res.data[0].name, cover: coverURL.data[0].url };
 }
 
