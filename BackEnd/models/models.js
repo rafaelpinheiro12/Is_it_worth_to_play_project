@@ -8,49 +8,17 @@ const mongoose = require('mongoose')
 		   required : true,
 		   unique   : true
 		},
-		gameGenre: {
-		   type     : String, 
-		   required : true,
+		igdbData: { 
+		   type     : Array, 
+		   required : true
 		},
-		gamePlatform: {
-		   type     : String,
-		   required : true,
+		rawgData: { 
+		   type     : Array, 
+		   required : true
 		},
-		gameReleaseYear: {
-		   type     : Number,
-		   required : true,
-		},
-		gameDeveloper: {
-		   type     : String,
-		   required : true,
-		},
-		gamePublisher: {
-		   type     : String,
-		   required : true,
-		},
-		gameRating: {
-		   type     : String,
-		   required : true,
-		},
-		gameDescription: {
-		   type     : String,
-		   required : true,
-		},
-		gameCoverImageURL: {
-		   type     : String,
-		   required : true,
-		},
-		gameTrailerURL: {
-		   type     : String,
-		   required : true,
-		},
-		gamePrice: {
-		   type     : Number,
-		   required : true,
-		},
-		gameMultiplayer: {
-		   type     : Boolean,
-		   required : true,
+		aiData: { 
+		   type     : Object, 
+		   required : true
 		}
 	});
 

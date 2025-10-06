@@ -1,6 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import { fetchIGDBGame } from "./controllers.js";
 import { fetchRAWGGame } from "./controllers.js";
+import GameData from '../models/models.js';
 
 // The client gets the API key from the environment variable `GEMINI_API_KEY`.
 const ai = new GoogleGenAI({});
@@ -97,6 +98,8 @@ Return JSON only.
   console.log(clean);
 	const parsed = JSON.parse(clean);
   res.send(parsed);
+  const saved = await GameData.create({gameName: gameName, igdbData: igdbData, rawgData: rawgData, aiData: parsed});
+  if(!saved) console.log("Error saving to database");
 };
 
 export { main };
