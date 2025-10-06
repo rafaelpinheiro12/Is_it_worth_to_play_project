@@ -38,7 +38,7 @@ function SelectedGame({ selectedGame }) {
             gameName: game.name,
           }
         );
-        if(!igdbResponse?.data.error){
+        if(igdbResponse?.data.error){
           setIgdbData(null);
         }else{
           if (igdbResponse?.data?.aiData) { // igdbResponse contains aiData already if its on the database
