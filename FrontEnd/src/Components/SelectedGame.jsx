@@ -38,9 +38,9 @@ function SelectedGame({ selectedGame }) {
             gameName: game.name,
           }
         );
-        if (igdbResponse.data.aiData[0]) { // igdbResponse contains aiData already if its on the database
-          setIgdbData(igdbResponse.data.igdbData[0]);
-          setAiData(igdbResponse.data.aiData[0]);
+        if (igdbResponse.data.aiData) { // igdbResponse contains aiData already if its on the database
+          setIgdbData(igdbResponse.data.igdbData);
+          setAiData(igdbResponse.data.aiData);
           setIsLoading(false);
           return; // If AI data is already present, skip fetching again
         }
@@ -51,7 +51,7 @@ function SelectedGame({ selectedGame }) {
           "http://localhost:4444/fetchgame/getAIResponse",
           {
             gameName: game.name,
-            igdbData: !igdbData || !igdbResponse.data ? {} : igdbData,
+            igdbData: igdbData || null,
             rawgData: game,
           }
         );
