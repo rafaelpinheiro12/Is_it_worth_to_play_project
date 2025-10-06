@@ -1,16 +1,18 @@
 import { useState, useEffect, use } from "react";
 import axios from "axios";
 import { useAtom } from "jotai";
-import { selectedGameAtom, igdbDataAtom, aiDataAtom } from "../State/state";
+import { selectedGameAtom, igdbDataAtom, aiDataAtom, rawgDataAtom } from "../State/state";
 import { useParams } from "react-router";
 
 function SelectedGame({ selectedGame }) {
   const [game, setGame] = useAtom(selectedGameAtom); // obj with all game name from rawg
   const [igdbData, setIgdbData] = useAtom(igdbDataAtom); // obj with all game info from igdb
+  const [rawgData, setRawgData] = useAtom(rawgDataAtom);
   const [aiData, setAiData] = useAtom(aiDataAtom); // obj with all ai response info
   const [isLoading, setIsLoading] = useState(false);
 
-  if (!selectedGame) {
+  console.log(rawgData, "rawgData");
+  if (!selectedGame && !game) {
     const { gameName } = useParams();
     setGame({ name: gameName });
   }
@@ -42,20 +44,32 @@ function SelectedGame({ selectedGame }) {
           setIgdbData(null);
         }else{
           if (igdbResponse?.data?.aiData) { // igdbResponse contains aiData already if its on the database
-          setIgdbData(igdbResponse.data.igdbData);
+          setIgdbData(igdbResponse?.data?.igdbData?.igdb_game);
+          setRawgData(igdbResponse.data.rawgData);
           setAiData(igdbResponse.data.aiData);
           setIsLoading(false);
           return; // If AI data is already present, skip fetching again
         }
         setIgdbData(igdbResponse.data);
-        }       
+        }
+
+        // Fetch RAWG data
+        const rawgResponse = await axios.post(
+          "http://localhost:4444/fetchGame/fetchRAWGGame",
+          {
+            gameName: game.name,
+          })          
+          if(!rawgData){
+            setRawgData(rawgResponse.data.rawg_game);
+          }
+             
         // Fetch AI response using the fresh IGDB data
         const aiResponse = await axios.post(
-          "http://localhost:4444/fetchgame/getAIResponse",
+          "http://localhost:4444/fetchGame/getAIResponse",
           {
             gameName: game.name,
             igdbData: igdbResponse?.data || null,
-            rawgData: game,
+            rawgData: rawgResponse?.data?.rawg_game || null,
           }
         );
         setAiData(aiResponse.data);
@@ -86,7 +100,7 @@ function SelectedGame({ selectedGame }) {
               <div className="game_info_container">
                 <div className="game_cover">
                   <img className="game_cover_img"
-                    src={!igdbData ? game.background_image : igdbData?.igdb_game?.cover ? igdbData?.igdb_game.cover : null}  
+                    src={!igdbData ? rawgData?.results[0]?.background_image : igdbData?.igdb_game?.cover ? igdbData?.igdb_game.cover : null}  
                     alt={`${selectedGame.name} cover image`}
                   />
                 </div>

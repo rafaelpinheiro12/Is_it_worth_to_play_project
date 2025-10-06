@@ -1,6 +1,4 @@
 import { GoogleGenAI } from "@google/genai";
-import { fetchIGDBGame } from "./controllers.js";
-import { fetchRAWGGame } from "./controllers.js";
 import GameData from '../models/models.js';
 
 // The client gets the API key from the environment variable `GEMINI_API_KEY`.
