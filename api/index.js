@@ -18,8 +18,8 @@ connectingToDB()
 
 app.use(require('cors')())
 
-app.use('/api/fetchGame', require('./routes/routes.js'))
-app.use('/api/users', require('./routes/users.routes.js'))
+app.use('/fetchGame', require('./routes/routes.js'))
+app.use('/users', require('./routes/users.routes.js'))
 
 module.exports = app
 
