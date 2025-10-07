@@ -1,3 +1,8 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
 .suggestion{
     display: flex;
     align-items: center;
@@ -45,7 +50,7 @@ li{
 .search-input-dropdown {
     position: absolute;
     top: 55px;
-    left:16.7%;
+    left:24.3%;
     background-color: rgb(77, 75, 75);
     border: 1px solid #ccc;
     border-top: none;
@@ -58,20 +63,18 @@ li{
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 10px;
     justify-content: flex-start;
-    margin: 100px;
+    margin: 50px 250px 0px 250px;
     background-color: #b6b6b6;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 20px;
 }
 
 .game_cover {
     display: flex;
-    margin: auto;
     align-items: center;
-    width: 30%;
-    border-radius: 10px;
-    margin-right: 20px;
+    width: 40%;
     overflow: hidden; 
    
 }
@@ -80,13 +83,14 @@ li{
     object-fit: cover;
     max-width: fit-content;
     max-height: fit-content;
+    border-radius: 20px;
 }
 
 .game_info {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 1%;
+    gap: 10px;
     max-width: 70%;
 }
 
@@ -98,6 +102,7 @@ li{
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 10px;
+    padding: 0%;
 }
 
 .game_devs_pub{
@@ -119,5 +124,46 @@ li{
     flex-direction: row;
     gap: 10px;
     align-items: center;
+    margin-bottom: 10px;
+}
+
+.game_player_sentiment{
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    justify-content: space-around;
+    margin-bottom: 10px;
+    align-items: flex-start;
+}
+
+.game_player_sentiment ul{
+    padding: 0px;
+    margin: 0px;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.pros_cons{
+    background-color: beige;
+    padding: 2%;
+    border-radius: 10px;
+}
+
+.game_price_stuff{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.game_platform_stuff{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: flex-start;
     margin-bottom: 10px;
 }

@@ -8,10 +8,9 @@ function NavBar() {
       <NavLink to="/">Home</NavLink>
       <GameSearchTool/>
       <NavLink to="/aboutus">About Us</NavLink>
-      <NavLink to="/user">User</NavLink>
+     {/*<NavLink to="/user">User</NavLink> */}
     </div>
   )
 }
 
 export default NavBar
-  
