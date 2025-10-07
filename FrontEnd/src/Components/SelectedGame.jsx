@@ -8,6 +8,7 @@ import {
   rawgDataAtom,
 } from "../State/state";
 import { useParams } from "react-router";
+import { URL } from "../config";
 
 function SelectedGame({ selectedGame }) {
   const [game, setGame] = useAtom(selectedGameAtom); // obj with all game name from rawg
@@ -39,7 +40,7 @@ function SelectedGame({ selectedGame }) {
 
         // Fetch IGDB data
         const igdbResponse = await axios.post(
-          "http://localhost:4444/fetchGame/fetchIGDBGame",
+          `${URL}/fetchGame/fetchIGDBGame`,
           {
             gameName: game.name,
           }
@@ -61,7 +62,7 @@ function SelectedGame({ selectedGame }) {
 
         // Fetch RAWG data
         const rawgResponse = await axios.post(
-          "http://localhost:4444/fetchGame/fetchRAWGGame",
+          `${URL}/fetchGame/fetchRAWGGame`,
           {
             gameName: game.name,
           }
@@ -72,7 +73,7 @@ function SelectedGame({ selectedGame }) {
 
         // Fetch AI response using the fresh IGDB data
         const aiResponse = await axios.post(
-          "http://localhost:4444/fetchGame/getAIResponse",
+          `${URL}/fetchGame/getAIResponse`,
           {
             gameName: game.name,
             igdbData: igdbResponse?.data || null,
