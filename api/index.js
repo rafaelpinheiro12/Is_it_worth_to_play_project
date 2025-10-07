@@ -7,10 +7,7 @@ app.use(require("express").json())
 
 async function connectingToDB  () {
   try {
-    await require("mongoose").connect(process.env.MONGO, {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-    });
+    await require("mongoose").connect(process.env.MONGO);
     console.log("Connected to the DB");
   } catch (error) {
     console.log("ERROR: Your DB is not running, start it up");
@@ -34,6 +31,5 @@ if (process.env.NODE_ENV !== 'production') {
     res.sendFile(__dirname + "/dist/index.html");
   });
   // Start the server
-  const port = process.env.PORT || 4444;
   app.listen(port, () => console.log("Listening on port: " + port));
 }
