@@ -229,7 +229,7 @@ function SelectedGame({ selectedGame }) {
                       : "AI analysis not available"}
                   </text>
                   </div>
-                  {aiData?.not_recommended_platforms.lenght && <text>
+                  {aiData?.not_recommended_platforms?.lenght && <text>
                     Not Recommended Platforms : {aiData.not_recommended_platforms}
                   </text>}
                   <text>

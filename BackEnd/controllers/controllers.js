@@ -87,7 +87,16 @@ async function getGameIGDB(gameName) {
 
   const res = await axios.post(
     "https://api.igdb.com/v4/games",
-    `search "${gameName}"; fields id, name, cover.image_id; limit 5;`,
+    `search "${gameName}"; fields id, name, cover.image_id,
+    age_ratings,aggregated_rating,aggregated_rating_count,alternative_names,
+    artworks,bundles,category,checksum,collection,collections,cover,created_at,dlcs,
+    expanded_games,expansions,external_games,first_release_date,follows,forks,
+    franchise,franchises,game_engines,game_localizations,game_modes,game_status,
+    game_type,genres,hypes,involved_companies,keywords,language_supports,
+    multiplayer_modes,parent_game,platforms,player_perspectives,ports,rating,
+    rating_count,release_dates,remakes,remasters,screenshots,similar_games,slug,
+    standalone_expansions,status,storyline,summary,tags,themes,
+    total_rating,total_rating_count,updated_at,url,version_parent,version_title,videos,websites; limit 5;`,
     {
       headers: {
         "Client-ID": twitch_client_id,
@@ -99,8 +108,9 @@ async function getGameIGDB(gameName) {
   if (!res?.data[0]?.cover?.image_id){return null;}
   const coverURL = `https://images.igdb.com/igdb/image/upload/t_cover_big/${res.data[0].cover.image_id}.jpg`;
   console.log(coverURL);
+  const data = res.data
   if (!coverURL) return null;
-  return { game: res.data[0].name, cover: coverURL };
+  return { game: res.data[0].name, cover: coverURL, data: data };
 }
 
 module.exports = {
