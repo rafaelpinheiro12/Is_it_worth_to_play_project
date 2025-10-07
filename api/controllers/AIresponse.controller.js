@@ -100,4 +100,4 @@ Return JSON only.
   if(!saved) console.log("Error saving to database");
 };
 
-export { main };
+module.exports = { main };
