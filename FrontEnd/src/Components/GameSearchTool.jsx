@@ -32,8 +32,9 @@ useEffect(() => {
   return (
     <>
       <input className="search-input" type="text" value={query} onChange={(e) => setQuery(e.target.value)} />
-      <div className="search-input-dropdown">
+      
         {showSuggestions && suggestions.length > 0 && (
+            <div className="search-input-dropdown">
           <ul >
             {suggestions.map((suggestion) => (
               <div className="suggestion" key={suggestion.id} onClick={() => {
@@ -46,8 +47,9 @@ useEffect(() => {
                 <li>{suggestion.name}</li>
               </div>
             ))}
-          </ul>)}
-      </div>
+          </ul>
+          </div>)}
+      
     </>
   )
 }

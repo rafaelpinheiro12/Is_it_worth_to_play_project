@@ -42,14 +42,13 @@ li{
     background-color: #f2f2f2;
     width: 50%;
     padding: 10px;
-    margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
 .search-input-dropdown {
     position: absolute;
-    top: 55px;
+    top: 48px;
     left:24.3%;
     background-color: rgb(77, 75, 75);
     border: 1px solid #ccc;
@@ -59,13 +58,18 @@ li{
     overflow-y: auto;
 }
 
+.search-input-dropdown ul{
+    padding: 10px;
+    cursor: pointer;
+}
+
 .game_info_container {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 10px;
+    gap: 20px;
     justify-content: flex-start;
-    margin: 50px 250px 0px 250px;
+    margin: 50px 200px 0px 200px;
     background-color: #b6b6b6;
     padding: 20px;
     border-radius: 20px;
@@ -81,6 +85,7 @@ li{
 
 .game_cover_img {
     object-fit: cover;
+    width: 100%;
     max-width: fit-content;
     max-height: fit-content;
     border-radius: 20px;
