@@ -1,6 +1,7 @@
 const app      = require('express')()
 require("dotenv").config()
-const port     = process.env.PORT || 4444 
+const port     = process.env.PORT || 4444
+const express  = require('express')
 
 app.use(require("express").urlencoded({extended: true}))
 app.use(require("express").json())
