@@ -1,5 +1,5 @@
-import { GoogleGenAI } from "@google/genai";
-import GameData from '../models/models.js';
+const { GoogleGenAI } = require("google-genai");
+const GameData = require("../models/models");
 
 // The client gets the API key from the environment variable `GEMINI_API_KEY`.
 const ai = new GoogleGenAI({});
