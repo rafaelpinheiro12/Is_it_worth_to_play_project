@@ -23,8 +23,6 @@ app.use(require('cors')())
 app.use('/api/fetchGame', require('./routes/routes.js'))
 app.use('/api/users', require('./routes/users.routes.js'))
 
-app.listen(port, () => console.log("Listening on port: " + port));
-
 module.exports = app
 
 if (process.env.NODE_ENV !== 'production') {
@@ -37,5 +35,5 @@ if (process.env.NODE_ENV !== 'production') {
   });
   // Start the server
   const port = process.env.PORT || 4444;
-  app.listen(port, () => console.log("🚀 Listening on port: " + port + " 🚀"));
+  app.listen(port, () => console.log("Listening on port: " + port));
 }
