@@ -35,6 +35,15 @@ li{
     padding: 10px;
 }
 
+.navbar button{
+    background-color: #a0a0a0;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 0px 15px;
+}
+
 .search-input {
     display: flexbox;
     justify-content: center;

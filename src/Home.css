@@ -1,0 +1,31 @@
+body{
+    background-color: #333;
+}
+
+.title_card{
+    text-align: center;
+    padding: 50px 20px;
+    background-color: #333;
+    font: bold 24px 'Open Sans', sans-serif;
+    color: #fff;
+    border-bottom: #454545 3px solid;
+}
+
+.home_text{
+    color: #fff;
+    margin-top: 50px;
+    text-align: center;
+    padding: 20px;
+    font: bold 20px 'Open Sans', sans-serif;
+}
+
+.home_text text{
+    color: #fa6c6c;
+    font: 15px 'Open Sans', sans-serif;
+}
+
+.home_text a{
+    color: #61c5ff;
+    font: 15px 'Open Sans', sans-serif;
+    text-decoration: none;
+}
