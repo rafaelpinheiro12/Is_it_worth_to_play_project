@@ -12,6 +12,7 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router'
 import SelectedGame from './Components/SelectedGame'
 import * as jose from 'jose'
 import Login from './Views/Login'
+import { Analytics } from "@vercel/analytics/react"
 
 function App() {
   
@@ -71,6 +72,7 @@ useEffect(() => {
           <Route path="/:gameName" element={<SelectedGame selectedGame = {selectedGame}/>}/>
         </Routes> 
       </Router>
+      <Analytics />
     </div>
   )
 }

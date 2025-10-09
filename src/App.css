@@ -35,7 +35,7 @@ li{
     padding: 10px;
 }
 
-.navbar button{
+.navbar a{
     background-color: #a0a0a0;
     border: none;
     cursor: pointer;
