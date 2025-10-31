@@ -21,6 +21,7 @@ useEffect(() => {
     }
 
     const debounceTimer = setTimeout(() => {
+        console.log('[GameSearchTool] Debounced search triggered for query:', query.trim());
         SearchInput({ query, setSuggestions, setShowSuggestions });
     }, 300);
 
@@ -28,6 +29,14 @@ useEffect(() => {
         clearTimeout(debounceTimer);
     };
 }, [query]);
+
+useEffect(() => {
+  if (!showSuggestions) return;
+  console.log('[GameSearchTool] Suggestions updated:', {
+    count: suggestions.length,
+    first: suggestions[0]
+  });
+}, [suggestions, showSuggestions]);
 
   return (
     <>
@@ -41,6 +50,7 @@ useEffect(() => {
                 setQuery("");
                 setShowSuggestions(false);
                 setSelectedSuggestion(suggestion);
+                console.log('[GameSearchTool] Suggestion selected:', suggestion);
                 navigate(`/${suggestion.name}`);
               }}>
                 <img className="suggestion-image" src={suggestion.background_image} alt={suggestion.name} />
