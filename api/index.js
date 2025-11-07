@@ -2,6 +2,7 @@ const app      = require('express')()
 require("dotenv").config()
 const port     = process.env.PORT || 4444
 const express  = require('express')
+const GameData = require('./models/models.js')
 
 app.use(require("express").urlencoded({extended: true}))
 app.use(require("express").json())
@@ -9,6 +10,9 @@ app.use(require("express").json())
 async function connectingToDB  () {
   try {
     await require("mongoose").connect(process.env.MONGO);
+    if (typeof GameData.ensureIndexesCleanup === 'function') {
+      await GameData.ensureIndexesCleanup();
+    }
     console.log("Connected to the DB");
   } catch (error) {
     console.log(error);
