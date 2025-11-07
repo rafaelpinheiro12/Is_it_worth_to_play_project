@@ -25,13 +25,16 @@ function SelectedGame({ selectedGame }) {
   // Main effect that handles the entire data fetching flow
   useEffect(() => {
     const fetchGameData = async () => {
-      if (!selectedGame?.name || isLoading) return;
+      const currentGameName = selectedGame?.name || game?.name;
+      const currentGameId = selectedGame?.id || game?.id;
+
+      if (!currentGameName || isLoading) return;
 
       // Only update if the game has actually changed
       //if (game?.name === selectedGame.name) return;
 
       setIsLoading(true);
-      console.log("Starting fetch for:", selectedGame.name);
+      console.log("Starting fetch for:", currentGameName);
 
       try {
         // Reset previous data
@@ -42,7 +45,8 @@ function SelectedGame({ selectedGame }) {
         const igdbResponse = await axios.post(
           `${URL}/fetchGame/fetchIGDBGame`,
           {
-            gameName: game.name,
+            gameId: currentGameId,
+            gameName: currentGameName,
           }
         );
         if (igdbResponse?.data.error) {
@@ -60,11 +64,22 @@ function SelectedGame({ selectedGame }) {
           setIgdbData(igdbResponse.data);
         }
 
+        const resolvedGameId =
+          currentGameId ||
+          igdbResponse?.data?.igdbId ||
+          igdbResponse?.data?.igdb_game?.id ||
+          igdbResponse?.data?.igdb_game?.data?.[0]?.id ||
+          igdbResponse?.data?.data?.[0]?.id;
+
+        if (!currentGameId && resolvedGameId) {
+          setGame((prev) => ({ ...(prev || {}), name: currentGameName, id: resolvedGameId }));
+        }
+
         // Fetch RAWG data
         const rawgResponse = await axios.post(
           `${URL}/fetchGame/fetchRAWGGame`,
           {
-            gameName: game.name,
+            gameName: currentGameName,
           }
         );
         if (!rawgData) {
@@ -75,7 +90,8 @@ function SelectedGame({ selectedGame }) {
         const aiResponse = await axios.post(
           `${URL}/fetchGame/getAIResponse`,
           {
-            gameName: game.name,
+            gameId: resolvedGameId,
+            gameName: currentGameName,
             igdbData: igdbResponse?.data || null,
             rawgData: rawgResponse?.data?.rawg_game || null,
           }
@@ -89,7 +105,7 @@ function SelectedGame({ selectedGame }) {
     };
 
     fetchGameData();
-  }, [game.name]); // Only depend on the game name changing
+  }, [selectedGame, game]); // Depend on selected game reference changes
 
   return (
     <div>

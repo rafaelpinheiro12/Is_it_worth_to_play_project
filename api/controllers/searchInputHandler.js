@@ -34,7 +34,7 @@ const searchInputHandler = async (req, res) => {
     // Search IGDB for games
     const response = await axios.post(
       "https://api.igdb.com/v4/games",
-      `search "${query.trim()}"; fields id, name, cover.image_id; limit 10;`,
+      `search "${query.trim()}"; fields id, name, cover.image_id, first_release_date; limit 10;`,
       {
         headers: {
           "Client-ID": twitch_client_id,
@@ -51,28 +51,23 @@ const searchInputHandler = async (req, res) => {
       background_image: game.cover?.image_id 
         ? `https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover.image_id}.jpg`
         : null,
+      release_date: game.first_release_date
+        ? new Date(game.first_release_date * 1000).toISOString().split("T")[0]
+        : null,
     }));
 
     console.log(`Found ${results.length} suggestions for: ${query}`);
-    // Mark source and disable caching
-    res.set('X-Search-Source', 'igdb');
-    res.set('Cache-Control', 'no-store');
-
+    
     return res.status(200).json({
       results: results,
-      count: results.length,
-      source: 'igdb'
+      count: results.length
     });
 
   } catch (error) {
     console.error("Error fetching game suggestions:", error.message);
-    // Mark source and disable caching even on error for debugging
-    res.set('X-Search-Source', 'igdb');
-    res.set('Cache-Control', 'no-store');
     return res.status(500).json({ 
       error: "Failed to fetch suggestions",
-      message: error.message,
-      source: 'igdb'
+      message: error.message 
     });
   }
 };

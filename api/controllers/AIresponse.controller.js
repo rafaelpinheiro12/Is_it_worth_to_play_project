@@ -12,6 +12,7 @@ let ai;
 
 const main = async (req, res,) => {
   const gameName = req.body.gameName;
+  const gameId = req.body.gameId;
   const igdbData = req.body.igdbData;
   const rawgData = req.body.rawgData;
   const prompt = `
@@ -102,7 +103,36 @@ Return JSON only.
   console.log(clean);
 	const parsed = JSON.parse(clean);
   res.send(parsed);
-  const saved = await GameData.create({gameName: gameName, igdbData: igdbData, rawgData: rawgData, aiData: parsed});
+  const deriveIgdbId = () => {
+    if (gameId) return gameId;
+    if (igdbData?.igdb_game?.id) return igdbData.igdb_game.id;
+    if (igdbData?.igdb_game?.data?.[0]?.id) return igdbData.igdb_game.data[0].id;
+    if (igdbData?.data?.[0]?.id) return igdbData.data[0].id;
+    return null;
+  };
+
+  const resolvedIgdbId = deriveIgdbId();
+
+  const update = {
+    gameName: gameName,
+    igdbData: igdbData,
+    rawgData: rawgData,
+    aiData: parsed,
+    timeStamp: Date.now(),
+  };
+
+  if (resolvedIgdbId !== null && resolvedIgdbId !== undefined) {
+    update.igdbId = resolvedIgdbId;
+  }
+
+  const filter = resolvedIgdbId !== null && resolvedIgdbId !== undefined ? { igdbId: resolvedIgdbId } : { gameName: gameName };
+
+  const saved = await GameData.findOneAndUpdate(filter, update, {
+    upsert: true,
+    new: true,
+    setDefaultsOnInsert: true,
+  });
+
   if(!saved) console.log("Error saving to database");
 };
 

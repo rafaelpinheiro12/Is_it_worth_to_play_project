@@ -3,10 +3,14 @@ const mongoose = require('mongoose')
 
 	const GameDataSchema = new mongoose.Schema({
 
+		igdbId: {
+		   type    : Number,
+		   unique  : true,
+		   sparse  : true,
+		},
 		gameName: { 
 		   type     : String, 
-		   required : true,
-		   unique   : true
+		   required : true
 		},
 		igdbData: { 
 		   type     : Schema.Types.Mixed, 

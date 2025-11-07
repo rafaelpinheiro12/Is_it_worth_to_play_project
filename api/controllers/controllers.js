@@ -24,24 +24,39 @@ const fetchRAWGGame = async (req, res, gameTitle) => {
 
 const fetchIGDBGame = async (req, res, gameTitle) => {
   const gameName = req?.body?.gameName || gameTitle;
-  if (!gameName) {
-    return res.status(400).json({ error: "Game name is required" });
+  const gameId = req?.body?.gameId;
+
+  if (!gameId && !gameName) {
+    return res.status(400).json({ error: "Game identifier is required" });
   }
-  // Check if game data already exists in the database before making API call and sets igdbdata response to that
-  const response = await GameData.find({ gameName: gameName });
-  if (response[0]) {
-    if(response[0].timeStamp > Date.now() - 604800000){
-      return res.status(200).json(response[0]);
-    }else{
-      await GameData.deleteOne({ gameName: gameName });
+
+  let cachedGame = null;
+
+  if (gameId) {
+    cachedGame = await GameData.findOne({ igdbId: gameId });
+  }
+
+  if (!cachedGame && !gameId && gameName) {
+    cachedGame = await GameData.findOne({ gameName: gameName });
+  }
+
+  if (cachedGame) {
+    const oneWeekInMs = 7 * 24 * 60 * 60 * 1000;
+    const lastUpdated = cachedGame.timeStamp instanceof Date ? cachedGame.timeStamp.getTime() : new Date(cachedGame.timeStamp).getTime();
+
+    if (!Number.isNaN(lastUpdated) && lastUpdated > Date.now() - oneWeekInMs) {
+      return res.status(200).json(cachedGame);
     }
+
+    await GameData.deleteOne({ _id: cachedGame._id });
   }
-  const igdb_game = await getGameIGDB(gameName);
+
+  const igdb_game = await getGameIGDB({ gameId, gameName });
   if (igdb_game) {
     console.log("Game found:", igdb_game);
     return res.status(200).json({ igdb_game });
   } else {
-    return res.status(200).json({ igdb_game: null });// IGDB does not have data for all games, so we return null if not found
+    return res.status(200).json({ igdb_game: null }); // IGDB does not have data for all games, so we return null if not found
   }
 };
 
@@ -82,12 +97,10 @@ async function getIGDB_AcessToken() {
   return res.data.access_token;
 }
 
-async function getGameIGDB(gameName) {
+async function getGameIGDB({ gameId, gameName }) {
   const token = await getIGDB_AcessToken();
 
-  const res = await axios.post(
-    "https://api.igdb.com/v4/games",
-    `search "${gameName}"; fields id, name, cover.image_id,
+  const fields = `fields id, name, cover.image_id,
     age_ratings,aggregated_rating,aggregated_rating_count,alternative_names,
     artworks,bundles,category,checksum,collection,collections,cover,created_at,dlcs,
     expanded_games,expansions,external_games,first_release_date,follows,forks,
@@ -96,7 +109,15 @@ async function getGameIGDB(gameName) {
     multiplayer_modes,parent_game,platforms,player_perspectives,ports,rating,
     rating_count,release_dates,remakes,remasters,screenshots,similar_games,slug,
     standalone_expansions,status,storyline,summary,tags,themes,
-    total_rating,total_rating_count,updated_at,url,version_parent,version_title,videos,websites; limit 5;`,
+    total_rating,total_rating_count,updated_at,url,version_parent,version_title,videos,websites;`;
+
+  const query = gameId
+    ? `${fields} where id = ${gameId}; limit 1;`
+    : `search "${gameName}"; ${fields} limit 5;`;
+
+  const res = await axios.post(
+    "https://api.igdb.com/v4/games",
+    query,
     {
       headers: {
         "Client-ID": twitch_client_id,
@@ -105,12 +126,18 @@ async function getGameIGDB(gameName) {
       },
     }
   );
-  if (!res?.data[0]?.cover?.image_id){return null;}
-  const coverURL = `https://images.igdb.com/igdb/image/upload/t_cover_big/${res.data[0].cover.image_id}.jpg`;
+  if (!res?.data?.length) {
+    return null;
+  }
+
+  const primary = res.data[0];
+  if (!primary?.cover?.image_id) {
+    return null;
+  }
+
+  const coverURL = `https://images.igdb.com/igdb/image/upload/t_cover_big/${primary.cover.image_id}.jpg`;
   console.log(coverURL);
-  const data = res.data
-  if (!coverURL) return null;
-  return { game: res.data[0].name, cover: coverURL, data: data };
+  return { id: primary.id, game: primary.name, cover: coverURL, data: res.data };
 }
 
 module.exports = {
