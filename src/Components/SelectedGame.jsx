@@ -16,6 +16,7 @@ function SelectedGame({ selectedGame }) {
   const [rawgData, setRawgData] = useAtom(rawgDataAtom);
   const [aiData, setAiData] = useAtom(aiDataAtom); // obj with all ai response info
   const [isLoading, setIsLoading] = useState(false);
+  const [aiError, setAiError] = useState(null);
 
   if (!selectedGame && !game) {
     const { gameName } = useParams();
@@ -40,6 +41,7 @@ function SelectedGame({ selectedGame }) {
         // Reset previous data
         setIgdbData(null);
         setAiData(null);
+        setAiError(null);
 
         // Fetch IGDB data
         const igdbResponse = await axios.post(
@@ -97,8 +99,14 @@ function SelectedGame({ selectedGame }) {
           }
         );
         setAiData(aiResponse.data);
+
+        const verdict = aiResponse?.data?.worth_playing;
+        if (!verdict || verdict === "AI analysis not available") {
+          setAiError("It seems that something went wrong. This could be a problem with our APIs connections. Please try again shortly.");
+        }
       } catch (error) {
         console.error("Error fetching game data:", error);
+        setAiError("It seems that something went wrong. This could be a problem with our APIs connections. Please try again shortly.");
       } finally {
         setIsLoading(false);
       }
@@ -109,6 +117,17 @@ function SelectedGame({ selectedGame }) {
 
   return (
     <div>
+      {aiError && (
+        <div className="ai-error-overlay">
+          <div className="ai-error-modal">
+            <h3 className="ai-error-title">Something went wrong</h3>
+            <p className="ai-error-message">{aiError}</p>
+            <button className="ai-error-dismiss" onClick={() => setAiError(null)}>
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
       {selectedGame && (
         <div>
           {isLoading ? (<text>Loading game data...</text>) : (
