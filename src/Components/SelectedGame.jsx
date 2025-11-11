@@ -133,7 +133,7 @@ function SelectedGame({ selectedGame }) {
           {isLoading ? (<text>Loading game data...</text>) : (
             <>
               <div className="game_info_container">
-                <div className="game_cover">
+                <aside className="game_cover">
                   <img
                     className="game_cover_img"
                     src={
@@ -145,31 +145,38 @@ function SelectedGame({ selectedGame }) {
                     }
                     alt={`${selectedGame.name} cover image`}
                   />
-                </div>
-                <div className="game_info">
-                  <div className="game_title">
-                    <text>
-                      Game Name:{" "}
-                      {aiData?.title
-                        ? aiData.title
-                        : "AI analysis not available"}
-                    </text>
-                  </div>
-                  <div className="game_devs_pub">
-                    <text>
-                      Developer:{" "}
-                      {aiData?.developer
-                        ? aiData.developer
-                        : "AI analysis not available"}
-                    </text>
-                    <text>
-                      Publisher:{" "}
-                      {aiData?.publisher
-                        ? aiData.publisher
-                        : "AI analysis not available"}
-                    </text>
-                  </div>
-                  <div className="game_time_to_beat">
+                </aside>
+                <main className="game_info">
+                  <header className="game_header">
+                    <div className="game_title">
+                      <text>
+                        {aiData?.title ? aiData.title : selectedGame.name}
+                      </text>
+                    </div>
+                    <div className="game_devs_pub">
+                      <text>
+                        Developer:{" "}
+                        {aiData?.developer
+                          ? aiData.developer
+                          : "AI analysis not available"}
+                      </text>
+                      <text>
+                        Publisher:{" "}
+                        {aiData?.publisher
+                          ? aiData.publisher
+                          : "AI analysis not available"}
+                      </text>
+                    </div>
+                  </header>
+
+                  {aiData?.worth_playing && (
+                    <div className="pros_cons" style={{ width: "100%" }}>
+                      <text>Verdict:</text>
+                      <p style={{ margin: 0 }}>{aiData.worth_playing}</p>
+                    </div>
+                  )}
+
+                  <section className="game_time_to_beat">
                     <text>
                       Time to beat Story:{" "}
                       {aiData?.time_to_beat?.main_story?.min &&
@@ -200,8 +207,9 @@ function SelectedGame({ selectedGame }) {
                           " hours"
                         : "AI analysis not available"}
                     </text>
-                  </div>
-                  <div className="game_critic_stuff">
+                  </section>
+
+                  <section className="game_critic_stuff">
                     <text>
                       Critic Score :{" "}
                       {aiData?.critic_score?.score
@@ -214,8 +222,9 @@ function SelectedGame({ selectedGame }) {
                         ? aiData.critic_score.summary
                         : "AI analysis not available"}
                     </text>
-                  </div>
-                  <div className="game_player_sentiment">
+                  </section>
+
+                  <section className="game_player_sentiment">
                     <div className="pros_cons">
                       <text>Player Sentiment - Pros :</text>
                       <ul>
@@ -236,44 +245,44 @@ function SelectedGame({ selectedGame }) {
                           : "AI analysis not available"}
                       </ul>
                     </div>
-                  </div>
-                  <div className="game_price_stuff">
-                  <text>
-                    Price Range: <br/>{" "}
-                    {aiData?.price?.range
-                      ? aiData.price.range
-                      : "AI analysis not available"}
-                  </text>
-                  <text>
-                    Price Deals :{" "}
-                    {aiData?.price?.deals
-                      ? aiData.price.deals
-                      : "AI analysis not available"}
-                  </text>
-                  </div>
-                  <div className="game_platform_stuff">
-                  <text>
-                    Preferred Platform :{" "}
-                    {aiData?.most_preferred_platform?.platform
-                      ? aiData.most_preferred_platform.platform
-                      : "AI analysis not available"}
-                  </text>
-                  <text>
-                    Reason :{" "}
-                    {aiData?.most_preferred_platform?.reason
-                      ? aiData.most_preferred_platform.reason
-                      : "AI analysis not available"}
-                  </text>
-                  </div>
-                  {aiData?.not_recommended_platforms?.lenght && <text>
-                    Not Recommended Platforms : {aiData.not_recommended_platforms}
-                  </text>}
-                  <text>
-                    {aiData?.worth_playing
-                      ? aiData.worth_playing
-                      : "AI analysis not available"}
-                  </text>
-                </div>
+                  </section>
+
+                  <section className="game_price_stuff">
+                    <text>
+                      Price Range:{" "}
+                      {aiData?.price?.range
+                        ? aiData.price.range
+                        : "AI analysis not available"}
+                    </text>
+                    <text>
+                      Price Deals:{" "}
+                      {aiData?.price?.deals
+                        ? aiData.price.deals
+                        : "AI analysis not available"}
+                    </text>
+                  </section>
+
+                  <section className="game_platform_stuff">
+                    <text>
+                      Preferred Platform:{" "}
+                      {aiData?.most_preferred_platform?.platform
+                        ? aiData.most_preferred_platform.platform
+                        : "AI analysis not available"}
+                    </text>
+                    <text>
+                      Reason:{" "}
+                      {aiData?.most_preferred_platform?.reason
+                        ? aiData.most_preferred_platform.reason
+                        : "AI analysis not available"}
+                    </text>
+                  </section>
+
+                  {aiData?.not_recommended_platforms?.lenght && (
+                    <text>
+                      Not Recommended Platforms: {aiData.not_recommended_platforms}
+                    </text>
+                  )}
+                </main>
               </div>
             </>
           )}
