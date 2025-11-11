@@ -307,6 +307,14 @@ li{
     border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
+    color: var(--text);
+}
+.home_text a{
+    color: var(--primary);
+    text-decoration: underline;
+}
+.title_card{
+    color: var(--text);
 }
 
 /* Responsive */
