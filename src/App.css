@@ -202,7 +202,7 @@ li{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: 24px;
     max-width: 65%;
 }
 
@@ -227,35 +227,48 @@ li{
 .game_devs_pub{
     display: flex;
     flex-direction: row;
-    gap: 24px;
+    gap: 32px;
     color: var(--text-secondary);
     font-size: 15px;
-    font-weight: 500;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
+    font-weight: 400;
+    margin-bottom: 0;
+    padding-bottom: 24px;
     border-bottom: 1px solid var(--border-light);
 }
 .game_devs_pub text {
     position: relative;
-    padding-left: 20px;
+    padding-left: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 .game_devs_pub text::before {
-    content: '•';
-    position: absolute;
-    left: 0;
-    color: var(--muted);
-    font-weight: 700;
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--muted);
+    flex-shrink: 0;
 }
 
 .game_time_to_beat{
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-bottom: 20px;
-    padding: 20px;
+    gap: 16px;
+    margin-bottom: 0;
+    padding: 24px;
     background: var(--surface-2);
     border-radius: var(--radius-sm);
     border: 1px solid var(--border-light);
+}
+.game_time_to_beat::before {
+    content: 'Time to Beat';
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
 }
 .game_time_to_beat text {
     display: block;
@@ -264,19 +277,37 @@ li{
     padding: 0;
     background: transparent;
     border: none;
-    font-weight: 500;
-    line-height: 1.6;
+    font-weight: 400;
+    line-height: 1.7;
+    padding-left: 20px;
+    position: relative;
+}
+.game_time_to_beat text::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--muted);
+    font-weight: 300;
 }
 
 .game_critic_stuff{
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-bottom: 20px;
-    padding: 20px;
+    gap: 16px;
+    margin-bottom: 0;
+    padding: 24px;
     background: var(--surface-2);
     border-radius: var(--radius-sm);
     border: 1px solid var(--border-light);
+}
+.game_critic_stuff::before {
+    content: 'Critic Reviews';
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
 }
 .game_critic_stuff text {
     display: block;
@@ -285,8 +316,17 @@ li{
     padding: 0;
     background: transparent;
     border: none;
-    font-weight: 500;
-    line-height: 1.6;
+    font-weight: 400;
+    line-height: 1.7;
+    padding-left: 20px;
+    position: relative;
+}
+.game_critic_stuff text::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--muted);
+    font-weight: 300;
 }
 
 .game_player_sentiment{
@@ -294,7 +334,7 @@ li{
     flex-direction: row;
     gap: 24px;
     justify-content: flex-start;
-    margin-bottom: 8px;
+    margin-bottom: 0;
     align-items: flex-start;
 }
 
@@ -329,57 +369,74 @@ li{
 .pros_cons text {
     display: block;
     font-weight: 600;
-    font-size: 16px;
-    margin-bottom: 12px;
-    color: var(--text);
-    letter-spacing: -0.01em;
+    font-size: 13px;
+    margin-bottom: 16px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
 }
 .pros_cons ul li {
     position: relative;
-    padding-left: 16px;
-    margin-bottom: 6px;
-    color: var(--text-secondary);
-    line-height: 1.6;
+    padding-left: 20px;
+    margin-bottom: 10px;
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+    font-weight: 400;
 }
 .pros_cons ul li::before {
     content: '•';
     position: absolute;
     left: 0;
     color: var(--muted);
-    font-weight: 600;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1;
 }
 
 /* Verdict section special styling */
 .pros_cons[style*="width: 100%"] {
     background: var(--surface-2);
     border: 1px solid var(--border-light);
-    padding: 24px 28px;
-    margin-bottom: 24px;
+    padding: 28px 32px;
+    margin-bottom: 0;
 }
 .pros_cons[style*="width: 100%"] text {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
     margin-bottom: 16px;
     display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 .pros_cons[style*="width: 100%"] p {
-    font-size: 17px;
+    font-size: 18px;
     line-height: 1.8;
     color: var(--text);
     font-weight: 400;
     margin: 0;
+    letter-spacing: -0.01em;
 }
 
 .game_price_stuff{
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-bottom: 20px;
-    padding: 20px;
+    gap: 16px;
+    margin-bottom: 0;
+    padding: 24px;
     background: var(--surface-2);
     border-radius: var(--radius-sm);
     border: 1px solid var(--border-light);
+}
+.game_price_stuff::before {
+    content: 'Pricing';
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
 }
 .game_price_stuff text {
     display: block;
@@ -388,19 +445,37 @@ li{
     padding: 0;
     background: transparent;
     border: none;
-    font-weight: 500;
-    line-height: 1.6;
+    font-weight: 400;
+    line-height: 1.7;
+    padding-left: 20px;
+    position: relative;
+}
+.game_price_stuff text::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--muted);
+    font-weight: 300;
 }
 
 .game_platform_stuff{
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-bottom: 20px;
-    padding: 20px;
+    gap: 16px;
+    margin-bottom: 0;
+    padding: 24px;
     background: var(--surface-2);
     border-radius: var(--radius-sm);
     border: 1px solid var(--border-light);
+}
+.game_platform_stuff::before {
+    content: 'Platform Recommendations';
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
 }
 .game_platform_stuff text {
     display: block;
@@ -409,8 +484,17 @@ li{
     padding: 0;
     background: transparent;
     border: none;
-    font-weight: 500;
-    line-height: 1.6;
+    font-weight: 400;
+    line-height: 1.7;
+    padding-left: 20px;
+    position: relative;
+}
+.game_platform_stuff text::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--muted);
+    font-weight: 300;
 }
 
 /* AI error overlay */
